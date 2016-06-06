@@ -29,7 +29,7 @@ public class FrequencySampling extends Sampling {
 
 		for (int i=0; i<searchResultsSize;i++){
 			int itemsetSize = transactions.get(i).size();
-			BigInteger weight = BigInteger.valueOf((long) (Math.pow(2, itemsetSize)-1));
+			BigInteger weight = BigInteger.valueOf((long) (Math.pow(2, itemsetSize)));
 				
 			weights[i] = weight;
 			powerSetSum = powerSetSum.add(weight);
@@ -46,7 +46,7 @@ public class FrequencySampling extends Sampling {
 	 * @param sampleIndex - the location of the tuple in the input matrix (original data -all itemsets)
 	 * @return the subset calculated for the given itemset
 	 */
-	public LinkedList<Integer> calculateSubset(Integer sampleIndex) {
+	public LinkedList<Integer> calculateSubset(Integer sampleIndex, int[] posit, int[] negat, LinkedList<Evaluation> eval) {
 		LinkedList<Integer> itemset = transactions.get(sampleIndex);
 		int[] outputListBinary = new int[(int)itemset.size()];
 		

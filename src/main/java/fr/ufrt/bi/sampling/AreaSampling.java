@@ -19,7 +19,7 @@ public class AreaSampling extends Sampling{
 	 * Area based
 	 * 
 	 * Creates a vector with the weight of each tuple
-	 * the weight is given by w = 2^(nb of items) - 1
+	 * 
 	 */
 	public void createWeights(){
 		calculateNumberOfTuples();
@@ -31,10 +31,10 @@ public class AreaSampling extends Sampling{
 
 		for (int i=0; i<searchResultsSize;i++){
 			int itemsetSize = transactions.get(i).size();
-			BigInteger weight = BigInteger.valueOf((long) (Math.pow(2, itemsetSize)-1));
-			
+			BigInteger itemsetSizeBig = BigInteger.valueOf(itemsetSize);
+			BigInteger weight =  itemsetSizeBig.multiply(BigInteger.valueOf((long) (Math.pow(2, itemsetSize-1))));
 			weights[i] = weight;
-			powerSetSum.add(weight);
+			powerSetSum = powerSetSum.add(weight);
 			/*int weight = (int) ((int) itemsetSize*(Math.pow(2, itemsetSize-1)));
 				
 			weights[i] =weight;
@@ -52,7 +52,7 @@ public class AreaSampling extends Sampling{
 	 * Given that selection, generates ONE random subset of the size selected for generation
 	 * @param sample_nb_itemset - the location of the tuple in the input matrix (original data -all itemsets)
 	 */
-	public LinkedList<Integer> calculateSubset(Integer sample_nb_itemset) {
+	public LinkedList<Integer> calculateSubset(Integer sample_nb_itemset,  int[] posit, int[] negat, LinkedList<Evaluation> evals) {
 		LinkedList<Integer> itemset = transactions.get(sample_nb_itemset);
 		int nb_items = (int)itemset.size();
 		Integer indexOfSearchedItem=0;

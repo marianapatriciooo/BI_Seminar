@@ -26,7 +26,6 @@ public class HashMapRKeys {
 		return hashMap.get(key);
 	}
 
-	@SuppressWarnings("unchecked")
 	/**
 	 * Gets the intersection of transactions that contains all items
 	 * @param items
@@ -34,7 +33,6 @@ public class HashMapRKeys {
 	 */
 	public ArrayList<Integer> getTransactionsItems(int[] items) {
 		ArrayList<Set<Integer>> transactions = new ArrayList<Set<Integer>>();
-
 
 		for (int item : items) {
 			Set<Integer> set = new HashSet<Integer>(hashMap.get(item));

@@ -65,12 +65,8 @@
 		.sampling-type > tbody > tr > td > label {
 			margin:0px 7px;
 		}
-		
-		.resultsTable > thead > tr > th:nth-child(2) {
-			width:15% !important;
-		}
 	
-		.resultsTable > thead > tr > th:nth-child(3) {
+		.resultsTable > thead > tr > th:nth-child(2) {
 			text-align:right;
 			width:20% !important;
 		}
@@ -132,10 +128,6 @@
 												<h:outputText value="#{item}  " />
 											</ui:repeat>
 										</div>
-									</p:column>
-									
-									<p:column headerText="Frequency">
-										<h:outputText value="#{searchBean.frequencies[rowId]}" />
 									</p:column>
 									
 									<p:column headerText="Relevant pattern?">

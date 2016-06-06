@@ -16,9 +16,9 @@ public class Config {
 		
 		BufferedReader br = null;
 		
-		String fileName = "/Users/larissaleite/Downloads/retail10.txt";
+		String fileName = "/Users/larissaleite/Downloads/accidents10.txt";
 
-		HashMapRKeys hashMapRKeys = new HashMapRKeys();
+		//HashMapRKeys hashMapRKeys = new HashMapRKeys();
         try {
         	br = new BufferedReader(new FileReader(fileName));
 			
@@ -26,22 +26,23 @@ public class Config {
 			String datSplitBy = " ";
 			
 			int transaction = 0;
-			while ((line = br.readLine()) != null) {
+			System.out.println("...Loading the data...");
+			while ((line = br.readLine()) != null ) {
 				String[] values = line.split(datSplitBy);
 				LinkedList<Integer> lines = new LinkedList<Integer>();
 				
 				for (String value : values) {
 					Integer integ = Integer.parseInt(value);
 					lines.add(integ);
+					
 				}
-				
 				dataset.add(lines);
 				/*for (String value : values) {
 					hashMapRKeys.addValue(Integer.parseInt(value), transaction);
 				}
 				transaction++;*/
 			}
-			
+			System.out.println(dataset.size() + " tuples added");
 			br.close();
 			
 		} catch (FileNotFoundException e) {

@@ -15,7 +15,7 @@ public abstract class Sampling {
 	//map the transaction index to its position (index) on the weight/positive/negative vectors
 	protected HashMap<Integer, Integer> transactionIndexMap;
 	
-	protected LinkedList<LinkedList<Integer>> interestingPatterns;
+	protected LinkedList<LinkedList<Integer>> interestingPatterns = new LinkedList<LinkedList<Integer>>();
 	
 	protected int searchResultsSize=0;
 	protected int denominator=0;
@@ -27,6 +27,8 @@ public abstract class Sampling {
 	
 	protected int[] positives;
 	protected int[] negatives;
+	
+	protected LinkedList<Evaluation> evaluations;
 	
 	//private final double euler = 0.5772156649;
 	private final double euler = 2;
@@ -42,7 +44,7 @@ public abstract class Sampling {
 		
 		this.relevantFeedback = relevantEvals;
 		this.searchedItem = searchedItem;
-		
+		this.evaluations =relevantEvals;
 		this.transactionIndexMap = transactionIndexMap;
 		
 		createWeights();
@@ -60,9 +62,13 @@ public abstract class Sampling {
 	 * Furthermore the denominator needs to be updated for the probabilities to be normalized
 	 * This meaning, the denominator will no longer be the sum of the powersets but the sum of the updated weights
 	 */
-	public void updateWeights(){
+	public void updateWeights(LinkedList<Evaluation> evaluations){
+		this.evaluations=evaluations;
 		for (int transaction=0; transaction<weights.length; transaction++) {
-			BigInteger updatedWeight = weights[transaction].add(BigInteger.valueOf((long) Math.pow(euler, (positives[transaction] - negatives[transaction]))));
+			double powerof =Math.pow(euler, (positives[transaction] - negatives[transaction]));
+			long updatedWeighttt = (long) (weights[transaction].longValue()*powerof);
+			BigInteger updatedWeight= BigInteger.valueOf(updatedWeighttt);
+			
 			if (weights[transaction].compareTo(updatedWeight) > 0) {
 				BigInteger updatePowerSet = weights[transaction].subtract(updatedWeight);
 				this.powerSetSum = this.powerSetSum.subtract(updatePowerSet);
@@ -70,7 +76,9 @@ public abstract class Sampling {
 				BigInteger updatePowerSet = updatedWeight.subtract(weights[transaction]);
 				this.powerSetSum = this.powerSetSum.add(updatePowerSet);
 			}
+
 			weights[transaction] = updatedWeight;
+			
 		}
 	}
 	
@@ -98,17 +106,22 @@ public abstract class Sampling {
 	 */
 	public void calculateSample(){
 		BigInteger dist;
-		int samplesize=0;
 		this.samples = new LinkedList<Integer>();
+		
+		dist = randomBigInteger(powerSetSum);
+		BigInteger iterationvalue=dist;
 		for(int i =0; i< searchResultsSize;i++){
-			dist = randomBigInteger(powerSetSum);
-			if (dist.compareTo(weights[i]) < 0){
+			
+			if (iterationvalue.compareTo(weights[i]) < 0){
 				samples.add(i);
-				samplesize++;
 				System.out.println("Samples has itemset number: " + i);
+				System.out.println("Iteration value: " +  iterationvalue + " Random: " + dist );
+				i=searchResultsSize;
+			}
+			else{
+				iterationvalue = iterationvalue.subtract(weights[i]);
 			}
 		}
-		System.out.println("Sample size: " + samplesize);
 		System.out.println();
 	}
 
@@ -127,19 +140,23 @@ public abstract class Sampling {
 	 * For each itemset on the sample, calls a method that generates the output subset
 	 */
 	public void calculateOutputPatterns() {
-		interestingPatterns = new LinkedList<LinkedList<Integer>>();
 		for (int i=0; i<samples.size();i++){
-			interestingPatterns.add(calculateSubset(samples.get(i)));
+			interestingPatterns.add(calculateSubset(samples.get(i), positives, negatives, evaluations));
 		}	
 		System.out.println();
 		System.out.println("Interesting Patterns found:");
 		
-		for (int i =0; i<interestingPatterns.size();i++){
-			for(int j =0; j<interestingPatterns.get(i).size();j++){
-				//System.out.print(interestingPatterns.get(i).get(j)+ " ");
-			}
-			System.out.println();
-		}
+//		for (int i =0; i<interestingPatterns.size();i++){
+//			for(int j =0; j<interestingPatterns.get(i).size();j++){
+//				System.out.print(interestingPatterns.get(i).get(j)+ " ");
+//			}
+//			System.out.println();
+//		}
+		
+	}
+	
+	public void clearPatterns() {
+		interestingPatterns.clear();
 	}
 	
 	/**
@@ -147,7 +164,7 @@ public abstract class Sampling {
 	 * @param sampleIndex - the location of the tuple in the input matrix (original data -all itemsets)
 	 * @return the subset calculated for the given itemset
 	 */
-	public abstract LinkedList<Integer> calculateSubset(Integer sampleIndex);
+	public abstract LinkedList<Integer> calculateSubset(Integer sampleIndex, int[] posit, int [] negat, LinkedList<Evaluation> evaluations);
 	
 	public LinkedList<LinkedList<Integer>> getPatterns(){
 		return interestingPatterns;

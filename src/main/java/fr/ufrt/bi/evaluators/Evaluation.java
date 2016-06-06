@@ -24,5 +24,14 @@ public class Evaluation {
 	public boolean getEval(){
 		return eval;
 	}
+	
+	public boolean itemIsContainedinPattern (Integer Item){
+		for (int i=0; i<pattern.size();i++){
+			if(pattern.get(i)==Item){
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
