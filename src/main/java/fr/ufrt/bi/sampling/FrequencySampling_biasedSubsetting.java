@@ -64,7 +64,7 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 	public void createWeights(){
 		calculateNumberOfTuples();
 		
-		this.weights = new BigInteger[searchResultsSize];
+		this.setWeights(new BigInteger[searchResultsSize]);
 		
 		this.positives = new int[searchResultsSize];
 		this.negatives = new int[searchResultsSize];
@@ -73,12 +73,12 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 			int itemsetSize = transactions.get(i).size();
 			BigInteger weight = BigInteger.valueOf((long) (Math.pow(2, itemsetSize)));
 				
-			weights[i] = weight;
+			getWeights()[i] = weight;
 			powerSetSum = powerSetSum.add(weight);
 			positives[i] = 0;
 			negatives[i] = 0;
 		}
-		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
+		System.out.println("Weights matrix created " + getWeights().length + " powerset sum: " +powerSetSum);
 	}
 	
 	

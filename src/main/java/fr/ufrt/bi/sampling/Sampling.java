@@ -19,7 +19,7 @@ public abstract class Sampling {
 	
 	protected int searchResultsSize=0;
 	protected int denominator=0;
-	protected BigInteger[] weights;
+	private BigInteger[] weights;
 	protected BigInteger powerSetSum = new BigInteger("0");
 	protected LinkedList<Integer> samples;
 	protected LinkedList<Evaluation> relevantFeedback;
@@ -31,7 +31,7 @@ public abstract class Sampling {
 	protected LinkedList<Evaluation> evaluations;
 	
 	//private final double euler = 0.5772156649;
-	private final double euler = 2;
+	private final double euler = 1.6;
 	/**
 	 * Create the weights for each tuple - createWeights()
 	 * According to the probability given by the weights creates a vector with the indexes of the tuples to be sampled - getSample()
@@ -64,20 +64,20 @@ public abstract class Sampling {
 	 */
 	public void updateWeights(LinkedList<Evaluation> evaluations){
 		this.evaluations=evaluations;
-		for (int transaction=0; transaction<weights.length; transaction++) {
+		for (int transaction=0; transaction<getWeights().length; transaction++) {
 			double powerof =Math.pow(euler, (positives[transaction] - negatives[transaction]));
-			long updatedWeighttt = (long) (weights[transaction].longValue()*powerof);
+			long updatedWeighttt = (long) (getWeights()[transaction].longValue()*powerof);
 			BigInteger updatedWeight= BigInteger.valueOf(updatedWeighttt);
 			
-			if (weights[transaction].compareTo(updatedWeight) > 0) {
-				BigInteger updatePowerSet = weights[transaction].subtract(updatedWeight);
+			if (getWeights()[transaction].compareTo(updatedWeight) > 0) {
+				BigInteger updatePowerSet = getWeights()[transaction].subtract(updatedWeight);
 				this.powerSetSum = this.powerSetSum.subtract(updatePowerSet);
 			} else {
-				BigInteger updatePowerSet = updatedWeight.subtract(weights[transaction]);
+				BigInteger updatePowerSet = updatedWeight.subtract(getWeights()[transaction]);
 				this.powerSetSum = this.powerSetSum.add(updatePowerSet);
 			}
 
-			weights[transaction] = updatedWeight;
+			getWeights()[transaction] = updatedWeight;
 			
 		}
 	}
@@ -112,14 +112,14 @@ public abstract class Sampling {
 		BigInteger iterationvalue=dist;
 		for(int i =0; i< searchResultsSize;i++){
 			
-			if (iterationvalue.compareTo(weights[i]) < 0){
+			if (iterationvalue.compareTo(getWeights()[i]) < 0){
 				samples.add(i);
 				System.out.println("Samples has itemset number: " + i);
 				System.out.println("Iteration value: " +  iterationvalue + " Random: " + dist );
 				i=searchResultsSize;
 			}
 			else{
-				iterationvalue = iterationvalue.subtract(weights[i]);
+				iterationvalue = iterationvalue.subtract(getWeights()[i]);
 			}
 		}
 		System.out.println();
@@ -168,6 +168,14 @@ public abstract class Sampling {
 	
 	public LinkedList<LinkedList<Integer>> getPatterns(){
 		return interestingPatterns;
+	}
+
+	public BigInteger[] getWeights() {
+		return weights;
+	}
+
+	public void setWeights(BigInteger[] weights) {
+		this.weights = weights;
 	}
 	
 }

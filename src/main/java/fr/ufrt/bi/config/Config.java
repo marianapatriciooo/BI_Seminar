@@ -16,7 +16,7 @@ public class Config {
 		
 		BufferedReader br = null;
 		
-		String fileName = "/Users/larissaleite/Downloads/accidents10.txt";
+		String fileName = "/Users/larissaleite/Downloads/retail.dat.txt";
 
 		//HashMapRKeys hashMapRKeys = new HashMapRKeys();
         try {

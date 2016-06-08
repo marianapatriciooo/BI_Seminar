@@ -24,7 +24,7 @@ public class AreaSampling extends Sampling{
 	public void createWeights(){
 		calculateNumberOfTuples();
 		
-		this.weights = new BigInteger[searchResultsSize];
+		this.setWeights(new BigInteger[searchResultsSize]);
 		
 		this.positives = new int[searchResultsSize];
 		this.negatives = new int[searchResultsSize];
@@ -33,7 +33,7 @@ public class AreaSampling extends Sampling{
 			int itemsetSize = transactions.get(i).size();
 			BigInteger itemsetSizeBig = BigInteger.valueOf(itemsetSize);
 			BigInteger weight =  itemsetSizeBig.multiply(BigInteger.valueOf((long) (Math.pow(2, itemsetSize-1))));
-			weights[i] = weight;
+			getWeights()[i] = weight;
 			powerSetSum = powerSetSum.add(weight);
 			/*int weight = (int) ((int) itemsetSize*(Math.pow(2, itemsetSize-1)));
 				
@@ -42,7 +42,7 @@ public class AreaSampling extends Sampling{
 			positives[i] = 0;
 			negatives[i] = 0;
 		}
-		System.out.println("Weights matrix created " + weights.length + " powerset sum: " +powerSetSum);
+		System.out.println("Weights matrix created " + getWeights().length + " powerset sum: " +powerSetSum);
 	}
 
 	/**

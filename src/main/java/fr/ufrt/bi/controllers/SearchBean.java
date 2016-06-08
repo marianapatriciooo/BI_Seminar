@@ -62,7 +62,7 @@ public class SearchBean {
 
 		BufferedReader br = null;
 
-		String fileName = "/Users/larissaleite/Downloads/accidents10.txt";
+		String fileName = "/Users/larissaleite/Downloads/retail.dat.txt";
 
 		try {
 			br = new BufferedReader(new FileReader(fileName));
@@ -107,16 +107,16 @@ public class SearchBean {
 
 			}
 			if (samplingType == SamplingType.FREQUENCY) {
-				this.sampling = new FrequencySampling(transactionIndexMap,
-						searchResults, evaluations, searchedPattern);
+				this.setSampling(new FrequencySampling(transactionIndexMap,
+						searchResults, evaluations, searchedPattern));
 			}
 			if (samplingType == SamplingType.AREA) {
-				this.sampling = new AreaSampling(transactionIndexMap,
-						searchResults, evaluations, searchedPattern);
+				this.setSampling(new AreaSampling(transactionIndexMap,
+						searchResults, evaluations, searchedPattern));
 			} else if (samplingType == SamplingType.FREQUENCY_BIASED_SUBSETING) {
-				this.sampling = new FrequencySampling_biasedSubsetting(
+				this.setSampling(new FrequencySampling_biasedSubsetting(
 						transactionIndexMap, searchResults, evaluations,
-						searchedPattern);
+						searchedPattern));
 			}
 
 			createSearchResultsMap();
@@ -136,14 +136,14 @@ public class SearchBean {
 	}
 
 	private void getPatternsFromSample() {
-		this.sampling.clearPatterns();
+		this.getSampling().clearPatterns();
 		
 		for (int i=0; i<5; i++) {
-			this.sampling.calculateSample();
-			this.sampling.calculateOutputPatterns();
+			this.getSampling().calculateSample();
+			this.getSampling().calculateOutputPatterns();
 		}
 
-		this.setPatterns(sampling.getPatterns());
+		this.setPatterns(getSampling().getPatterns());
 		this.getPatternsFrequencies();
 		if (this.getPatterns().size() == 0) {
 			this.getPatternsFromSample();
@@ -176,28 +176,26 @@ public class SearchBean {
 				.getTransactionsItems(items);
 
 		if (feedback) {
-			this.sampling.updatePositives(transactionsItems);
+			this.getSampling().updatePositives(transactionsItems);
 		} else {
-			this.sampling.updateNegatives(transactionsItems);
+			this.getSampling().updateNegatives(transactionsItems);
 		}
 
-		this.sampling.updateWeights(evaluations);
+		this.getSampling().updateWeights(evaluations);
 
 		// after feedback is given, remove from the list of patterns
-		this.patterns.remove(patternIndex);
-		this.frequencies.remove(patternIndex);
+		//this.patterns.remove(patternIndex);
+		//this.frequencies.remove(patternIndex);
 		
-		if (patterns.isEmpty()) {
-			getPatternsFromSample();
-		}
+		//if (patterns.isEmpty()) {
+		//	getPatternsFromSample();
+		//}
 	}
 	
 	private void addtoSearchResults(int i) {
 		LinkedList<Integer> tuple = new LinkedList<>();
+		tuple.addAll(dataset.get(i));
 
-		for (int j = 0; j < dataset.get(i).size(); j++) {
-			tuple.add(dataset.get(i).get(j));
-		}
 		searchResults.add(tuple);
 	}
 
@@ -235,6 +233,19 @@ public class SearchBean {
 
 	public void setFrequencies(LinkedList<Integer> frequencies) {
 		this.frequencies = frequencies;
+	}
+
+	public Sampling getSampling() {
+		return sampling;
+	}
+
+	public void setSampling(Sampling sampling) {
+		this.sampling = sampling;
+	}
+
+	public void calc() {
+		this.patterns.clear();
+		getPatternsFromSample();
 	}
 
 }
