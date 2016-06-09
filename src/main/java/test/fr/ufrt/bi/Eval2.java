@@ -8,20 +8,14 @@ import java.io.IOException;
 import java.io.Writer;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import org.primefaces.event.SlideEndEvent;
-
-import fr.ufrt.bi.config.Config;
 import fr.ufrt.bi.controllers.SearchBean;
-import fr.ufrt.bi.evaluators.Evaluation;
 import fr.ufrt.bi.sampling.HashMapRKeys;
-import fr.ufrt.bi.sampling.Sampling;
 import fr.ufrt.bi.sampling.SamplingType;
 
 public class Eval2 {
@@ -38,7 +32,6 @@ public class Eval2 {
 		sb = new SearchBean();
 		sb.setSamplingType(type);
 		typ = type.name();
-		// create();
 	}
 
 	public ArrayList<BigInteger[]> evaluate(ArrayList<Integer> startingPattern, ArrayList<Integer> endPattern, double smilarity) {
@@ -57,7 +50,6 @@ public class Eval2 {
 			if (l.size() == 0)
 				break;
 
-			//System.out.println("NNNNNNN ->" + sb.getWeights().length);
 			int y = 0;
 			map2.add(sb.getSampling().getWeights().clone());
 			
@@ -67,10 +59,6 @@ public class Eval2 {
 				map.put(i, sim);
 				if(sim >0.8)
 					break;
-				// if(i==0|| i==999 || i== 10 || i==500){
-//				System.out.println(map2.size());
-//				System.out.println(map2.get(0).length);
-//				// }
 				if(i<300){
 				
 				if (sim >= smilarity) {
@@ -85,7 +73,6 @@ public class Eval2 {
 			l = sb.getPatterns();
 		}
 
-		// System.out.println(map2);
 		writeFile2();
 		writeFile();
 		return map2;
@@ -131,7 +118,6 @@ public class Eval2 {
 					if((map2.get(i)[j]).compareTo((map2.get(i-1)[j]))<0){
 						sum2++;
 					}
-					//writer.append((map2.get(i)[j]).toString()).append(",");
 
 				}
 				writer.append(String.valueOf(sum1)).append(",").append(String.valueOf(sum2));
@@ -165,14 +151,12 @@ public class Eval2 {
 			int transaction = 1;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(datSplitBy);
-				LinkedList<Integer> lines = new LinkedList<Integer>();
 
 				for (String value : values) {
 					Integer integ = Integer.parseInt(value);
 					hashMapRKeys.addValue(integ, transaction);
 				}
 				transaction++;
-				// System.out.println(transaction);
 			}
 
 			br.close();

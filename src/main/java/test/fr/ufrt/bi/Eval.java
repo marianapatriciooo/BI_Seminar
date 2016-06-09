@@ -32,7 +32,6 @@ public class Eval {
 		sb = new SearchBean();
 		sb.setSamplingType(type);
 		typ = type.name();
-		// create();
 	}
 
 	public void evaluate(ArrayList<Integer> startingPattern, ArrayList<Integer> endPattern, double smilarity) {
@@ -51,7 +50,6 @@ public class Eval {
 			if (l.size() == 0)
 				break;
 
-			//System.out.println("NNNNNNN ->" + sb.getWeights().length);
 			int y = 0;
 			map2.add(sb.getSampling().getWeights().clone());
 			
@@ -59,10 +57,6 @@ public class Eval {
 
 				double sim = getSimilarity(new ArrayList<Integer>(linkedList), endPattern);
 				map.put(i, sim);
-				// if(i==0|| i==999 || i== 10 || i==500){
-				//System.out.println(map2.size());
-				//System.out.println(map2.get(0).length);
-				// }
 				if (sim >= smilarity) {
 					sb.userEvaluation(y, true);
 				} else
@@ -73,7 +67,6 @@ public class Eval {
 			l = sb.getPatterns();
 		}
 
-		// System.out.println(map2);
 		writeFile2();
 		writeFile();
 	}
@@ -130,14 +123,12 @@ public class Eval {
 			int transaction = 1;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(datSplitBy);
-				LinkedList<Integer> lines = new LinkedList<Integer>();
 
 				for (String value : values) {
 					Integer integ = Integer.parseInt(value);
 					hashMapRKeys.addValue(integ, transaction);
 				}
 				transaction++;
-				// System.out.println(transaction);
 			}
 
 			br.close();

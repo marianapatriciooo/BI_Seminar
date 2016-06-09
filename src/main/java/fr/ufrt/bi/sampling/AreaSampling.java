@@ -35,10 +35,6 @@ public class AreaSampling extends Sampling{
 			BigInteger weight =  itemsetSizeBig.multiply(BigInteger.valueOf((long) (Math.pow(2, itemsetSize-1))));
 			getWeights()[i] = weight;
 			powerSetSum = powerSetSum.add(weight);
-			/*int weight = (int) ((int) itemsetSize*(Math.pow(2, itemsetSize-1)));
-				
-			weights[i] =weight;
-			powerSetSum = powerSetSum + weight*/;
 			positives[i] = 0;
 			negatives[i] = 0;
 		}

@@ -15,7 +15,7 @@ import fr.ufrt.bi.config.Config;
 import fr.ufrt.bi.evaluators.Evaluation;
 import fr.ufrt.bi.sampling.AreaSampling;
 import fr.ufrt.bi.sampling.FrequencySampling;
-import fr.ufrt.bi.sampling.FrequencySampling_biasedSubsetting;
+import fr.ufrt.bi.sampling.FrequencySamplingBiasedSubsetting;
 import fr.ufrt.bi.sampling.HashMapRKeys;
 import fr.ufrt.bi.sampling.Sampling;
 import fr.ufrt.bi.sampling.SamplingType;
@@ -114,7 +114,7 @@ public class SearchBean {
 				this.setSampling(new AreaSampling(transactionIndexMap,
 						searchResults, evaluations, searchedPattern));
 			} else if (samplingType == SamplingType.FREQUENCY_BIASED_SUBSETING) {
-				this.setSampling(new FrequencySampling_biasedSubsetting(
+				this.setSampling(new FrequencySamplingBiasedSubsetting(
 						transactionIndexMap, searchResults, evaluations,
 						searchedPattern));
 			}
@@ -184,12 +184,12 @@ public class SearchBean {
 		this.getSampling().updateWeights(evaluations);
 
 		// after feedback is given, remove from the list of patterns
-		//this.patterns.remove(patternIndex);
-		//this.frequencies.remove(patternIndex);
+		this.patterns.remove(patternIndex);
+		this.frequencies.remove(patternIndex);
 		
-		//if (patterns.isEmpty()) {
-		//	getPatternsFromSample();
-		//}
+		if (patterns.isEmpty()) {
+			getPatternsFromSample();
+		}
 	}
 	
 	private void addtoSearchResults(int i) {

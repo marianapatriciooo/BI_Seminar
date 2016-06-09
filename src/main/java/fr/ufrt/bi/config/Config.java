@@ -6,26 +6,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import fr.ufrt.bi.sampling.HashMapRKeys;
-
 public class Config {
 	
 	public static LinkedList<LinkedList<Integer>> loadDataset() {
-	//public static HashMapRKeys loadDataset() {
 		LinkedList<LinkedList<Integer>> dataset = new LinkedList<LinkedList<Integer>>();
 		
 		BufferedReader br = null;
 		
 		String fileName = "/Users/larissaleite/Downloads/retail.dat.txt";
 
-		//HashMapRKeys hashMapRKeys = new HashMapRKeys();
         try {
         	br = new BufferedReader(new FileReader(fileName));
 			
 			String line = "";
 			String datSplitBy = " ";
 			
-			int transaction = 0;
 			System.out.println("...Loading the data...");
 			while ((line = br.readLine()) != null ) {
 				String[] values = line.split(datSplitBy);
@@ -37,10 +32,6 @@ public class Config {
 					
 				}
 				dataset.add(lines);
-				/*for (String value : values) {
-					hashMapRKeys.addValue(Integer.parseInt(value), transaction);
-				}
-				transaction++;*/
 			}
 			System.out.println(dataset.size() + " tuples added");
 			br.close();
@@ -54,7 +45,6 @@ public class Config {
 		}
         
         return dataset;
-       // return hashMapRKeys;
 	}
 
 }

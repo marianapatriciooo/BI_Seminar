@@ -30,7 +30,6 @@ public abstract class Sampling {
 	
 	protected LinkedList<Evaluation> evaluations;
 	
-	//private final double euler = 0.5772156649;
 	private final double euler = 1.6;
 	/**
 	 * Create the weights for each tuple - createWeights()
@@ -48,8 +47,6 @@ public abstract class Sampling {
 		this.transactionIndexMap = transactionIndexMap;
 		
 		createWeights();
-		//calculateSample();
-		//calculateOutputPatterns();
 	}
 
 	/**
@@ -146,12 +143,12 @@ public abstract class Sampling {
 		System.out.println();
 		System.out.println("Interesting Patterns found:");
 		
-//		for (int i =0; i<interestingPatterns.size();i++){
-//			for(int j =0; j<interestingPatterns.get(i).size();j++){
-//				System.out.print(interestingPatterns.get(i).get(j)+ " ");
-//			}
-//			System.out.println();
-//		}
+		for (int i =0; i<interestingPatterns.size();i++){
+			for(int j =0; j<interestingPatterns.get(i).size();j++){
+				System.out.print(interestingPatterns.get(i).get(j)+ " ");
+			}
+			System.out.println();
+		}
 		
 	}
 	

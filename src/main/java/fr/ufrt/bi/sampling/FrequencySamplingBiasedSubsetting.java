@@ -7,12 +7,12 @@ import java.util.Random;
 
 import fr.ufrt.bi.evaluators.Evaluation;
 
-public class FrequencySampling_biasedSubsetting extends Sampling {
+public class FrequencySamplingBiasedSubsetting extends Sampling {
 	
 	private double alpha = 1.1;
 	private HashMap<Integer, Double> allitemWeights;
 	
-	public FrequencySampling_biasedSubsetting(HashMap<Integer, Integer> transactionIndexMap, LinkedList<LinkedList<Integer>> dataset, LinkedList<Evaluation> relevantEvals, int searchItem) {
+	public FrequencySamplingBiasedSubsetting(HashMap<Integer, Integer> transactionIndexMap, LinkedList<LinkedList<Integer>> dataset, LinkedList<Evaluation> relevantEvals, int searchItem) {
 		super(transactionIndexMap, dataset, relevantEvals, searchItem);
 		System.out.println("Nb of transactions resulting from the search " + transactions.size());
 		initializeItemWeights();
@@ -30,7 +30,6 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 	}
 	
 	/**
-	 * 
 	 * @return the L - the average length of the itemsets that have been evaluated positively
 	 */
 	public double averageSizePositiveFeedback(double sizeitemsetPicked){
@@ -80,10 +79,6 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 		}
 		System.out.println("Weights matrix created " + getWeights().length + " powerset sum: " +powerSetSum);
 	}
-	
-	
-	
-
 
 	/**
 	 * To sum up, if:
@@ -106,12 +101,10 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 		double[] outputListBinary = new double[itemset.size()];
 		double[] itemweights = new double[itemset.size()];
 		Random r = new Random();
-		double nbevals=0;
 		LinkedList<Integer> relevantEvals =new LinkedList<Integer>();
 		
 		//Make a vector with bias
 		for(int i=0; i<itemset.size(); i++){
-			Integer item = itemset.get(i);
 			int positives=0;
 			int negatives=0;
 			for(int j=0; j<evaluations.size();j++){
@@ -121,8 +114,7 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 						if(!relevantEvals.contains(j)){
 							relevantEvals.add(j);
 						}
-					}
-					else{
+					} else{
 						negatives++;
 						if(!relevantEvals.contains(j)){
 							relevantEvals.add(j);
@@ -132,14 +124,12 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 				}	
 			}
 			//for each item get the alpha to the power of the difference between p an n
-				//nb of relevant evals - total
-				//double denom = relevantEvals.size()+1;
+			//nb of relevant evals - total
 			double diff = (positives-(negatives));
 			itemweights[i]=Math.pow(alpha, diff);
 		}
 		
 		double sumofweights=0;
-		
 		
 		//apply the bias to the previous weights - p(i-1)*bias
 		for(int i=0; i<itemset.size(); i++){
@@ -160,10 +150,6 @@ public class FrequencySampling_biasedSubsetting extends Sampling {
 			System.out.println("Sum of weights: " + sumofweights + " FinalProbability: " +itemweights[i] );
 			allitemWeights.put(itemset.get(i), itemweights[i]);
 		}
-		
-		
-		
-		
 		System.out.println("Sample itemset to generate a subset: ");
 		
 		//do a random - float - to see if it is bigger or smaller than the probability given
